@@ -72,7 +72,7 @@ class qt():
         return math.isclose(self.R,other.R) and math.isclose(self.x,other.x) and math.isclose(self.y,other.y) and math.isclose(self.z,other.z)
 
     def __ne__(self,other):
-        return not self==other
+        return not self is other
     
 def add(a,b):
     return qt(a.R+b.R,a.x+b.x,a.y+b.y,a.z+b.z)
