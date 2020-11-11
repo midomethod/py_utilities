@@ -159,22 +159,22 @@ class mat():
         return mat(sub(self.arr,other.arr))
 
     def __mul__(self,other):
-        if type(other) is float or type(other) is int or type(other) is complex:
+        if type(other) in [float,int,complex]:
             return mat(scale(other,self.arr))
         return mat(mul(self.arr,other.arr))
 
     def __rmul__(self,other):
-        if type(other) is float or type(other) is int or type(other) is complex:
+        if type(other) in [float,int,complex]:
             return mat(scale(1/other,self.arr))
         return mat(mul(other.arr,self.arr))
 
     def __truediv__(self,other):
-        if type(other) is float or type(other) is int or type(other) is complex:
+        if type(other) in [float,int,complex]:
             return mat(scale(1/other,self.arr))
         return mat(mul(self.arr,inv(other.arr)))
 
     def __rtruediv__(self,other):
-        if type(other) is float or type(other) is int or type(other) is complex:
+        if type(other) in [float,int,complex]:
             return mat(scale(other,inv(self.arr)))
         return mat(mul(other.arr,inv(self.arr)))
 
