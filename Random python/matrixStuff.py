@@ -7,13 +7,13 @@ def add(a,b):
     if size(a) != size(b):
         return "Dimensions must match"
     else:
-        return [[a[col][row]+b[col][row] for col in range(len(a))] for row in range(len(a[0]))]
+        return transpose([[a[col][row]+b[col][row] for col in range(len(a))] for row in range(len(a[0]))])
 
 def sub(a,b):
     if size(a) != size(b):
         return "Dimensions must match"
     else:
-        return [[a[col][row]-b[col][row] for col in range(len(a))] for row in range(len(a[0]))]
+        return transpose([[a[col][row]-b[col][row] for col in range(len(a))] for row in range(len(a[0]))])
 
 def scale(c,A):
     return [[c*A[i][j] for j in range(size(A)[1])] for i in range(size(A)[0])]
@@ -43,8 +43,13 @@ def eq(a,b):
     if size(a) != size(b):
         return "Dimensions must match"
     else:
-        val = [[not math.isclose(a[col][row],b[col][row]) for col in range(len(a))] for row in range(len(a[0]))][0]
-        return not any(val)
+        m,n=size(a)
+        matching = True
+        for i in range(m):
+            for j in range(n):
+                if a[i][j]!=b[i][j]:
+                    matching = False
+        return matching
 
 def transpose(a):
     #return [list(tup) for tup in zip(a)]
@@ -120,3 +125,62 @@ def inv(A):
         "Non-invertible"
     return transpose(scale(1/determinant(A),[[ ((-1)**(i+j))*determinant(subEx(A,i,j)) for j in range(size(A)[1])] for i in range(size(A)[0])]))
 
+class mat():
+    def __init__(self,val):
+        self.arr = val
+        return
+
+    def __str__(self):
+        result = ""
+        m,n = size(self.arr)
+        result = result + "["
+        for i in range(m):
+            result = result + "["
+            for j in range(n):
+                result = result + str(self.arr[i][j])
+                if j<n-1: # Off by one error
+                    result = result + ", "
+            result = result + "]"
+            if i<m-1:
+                result = result + ", "
+        result = result + "]"
+        return result
+
+    def __eq__(self,other):
+        return eq(self.arr,other.arr)
+
+    def __ne__(self,other):
+        return not self==other
+
+    def __add__(self,other):
+        return mat(add(self.arr,other.arr))
+
+    def __sub__(self,other):
+        return mat(sub(self.arr,other.arr))
+
+    def __mul__(self,other):
+        if type(other) is float or type(other) is int or type(other) is complex:
+            return mat(scale(other,self.arr))
+        return mat(mul(self.arr,other.arr))
+
+    def __rmul__(self,other):
+        if type(other) is float or type(other) is int or type(other) is complex:
+            return mat(scale(1/other,self.arr))
+        return mat(mul(other.arr,self.arr))
+
+    def __truediv__(self,other):
+        if type(other) is float or type(other) is int or type(other) is complex:
+            return mat(scale(1/other,self.arr))
+        return mat(mul(self.arr,inv(other.arr)))
+
+    def __rtruediv__(self,other):
+        if type(other) is float or type(other) is int or type(other) is complex:
+            return mat(scale(other,inv(self.arr)))
+        return mat(mul(other.arr,inv(self.arr)))
+
+    def arr(self):
+        return self.arr
+    
+I1 = mat([[1]])
+I2 = mat([[1,0],[0,1]])
+I3 = mat([[1,0,0],[0,1,0],[0,0,1]])

@@ -25,6 +25,54 @@ class qt():
     
     def mag(self):
         return self.mg
+
+    def __add__(self,other):
+        if type(other) is float or type(other) is int:
+            return add(self,qt(other,0,0,0))
+        return add(self,other)
+
+    def __radd__(self,other):
+        if type(other) is float or type(other) is int:
+            return add(self,qt(other,0,0,0))
+        return add(self,other)
+
+    def __sub__(self,other):
+        if type(other) is float or type(other) is int:
+            return sub(self,qt(other,0,0,0))
+        return sub(self,other)
+
+    def __rsub__(self,other):
+        if type(other) is float or type(other) is int:
+            return sub(qt(other,0,0,0),self)
+        return sub(other,self)
+
+    def __rmul__(self,other):
+        if type(other) is float or type(other) is int:
+            return scale(self,other)
+        return mul(self,other)
+
+    def __mul__(self,other):
+        if type(other) is float or type(other) is int:
+            return scale(self,other)
+        return mul(self,other)
+    
+    def __rtruediv__(self,other):
+        if type(other) is float or type(other) is int:
+            return scale(oneOver(self),other)
+        return div(other,self)
+
+    def __truediv__(self,other):
+        if type(other) is float or type(other) is int:
+            return scale(self,1/other)
+        return div(self,other)
+
+    def __eq__(self,other):
+        if type(other) is float or type(other) is int:
+            return math.isclose(self.R,other) and math.isclose(self.x,0) and math.isclose(self.y,0) and math.isclose(self.z,0)
+        return math.isclose(self.R,other.R) and math.isclose(self.x,other.x) and math.isclose(self.y,other.y) and math.isclose(self.z,other.z)
+
+    def __ne__(self,other):
+        return not self==other
     
 def add(a,b):
     return qt(a.R+b.R,a.x+b.x,a.y+b.y,a.z+b.z)
@@ -87,3 +135,7 @@ def rotate(pt,axis,thetaD):
     Q_inv = conj(Q)
     pAfterL = mul(Q,pt)
     return mul(pAfterL,Q_inv)
+
+i = qt(0,1,0,0)
+j = qt(0,0,1,0)
+k = qt(0,0,0,1)
