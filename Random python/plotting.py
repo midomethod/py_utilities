@@ -4,7 +4,7 @@ import sys, os, re
 import matplotlib.pyplot as plt
 import pandas as pd
 
-os.system('make clean; make;')
+os.system('make clean; make; mkdir figures;')
 
 mapping = {
 	's': 'arcSin',
@@ -32,7 +32,7 @@ for func in ['s', 'c', 't', 'l']:
 		df.plot(kind='line',x='x', y='Library', color='blue', ax=ax)
 		df.plot(kind='line',x='x', y='Difference', color='purple', ax=ax)
 
-		plt.savefig(f'figure-{func}-{mode}.png')
+		plt.savefig(f'figures/figure-{func}-{mode}.png')
 		plt.clf()
 
 os.system('rm *.txt; make clean;')
